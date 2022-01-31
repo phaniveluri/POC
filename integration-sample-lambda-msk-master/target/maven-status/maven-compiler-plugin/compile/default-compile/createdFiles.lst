@@ -1,0 +1,4 @@
+com\amazonaws\kafka\samples\AggregateUtils.class
+com\amazonaws\kafka\samples\Employee.class
+com\amazonaws\kafka\samples\DynamoDBUtils.class
+com\amazonaws\kafka\samples\HandlerMSK.class
