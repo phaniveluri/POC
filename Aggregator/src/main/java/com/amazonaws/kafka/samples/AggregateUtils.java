@@ -40,7 +40,7 @@ public class AggregateUtils {
 		dbUtils = new DynamoDBUtils();
 	}
 
-	public void aggregate(JsonObject payload) {
+	public String aggregate(JsonObject payload) {
 		DynamoDBUtils dbUtils = new DynamoDBUtils();
 		Item it = null;
 		it = dbUtils.getItem(payload.get(PK).getAsString());
@@ -56,6 +56,8 @@ public class AggregateUtils {
 			itL.set(0, iit);
 		});
 		dbUtils.updateItem(itL.get(0));
+		
+		return itL.get(0).toJSON();
 	}
 
 }

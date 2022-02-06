@@ -44,7 +44,6 @@ public class HandlerMSK implements RequestHandler<KafkaEvent, String> {
 			byte[] decodedBytes = Base64.getDecoder().decode(r.getValue());
 			String decodedString = new String(decodedBytes);
 			logger.info("Message : {} \n", decodedString);
-
 			JsonObject payload = null;
 			try {
 
@@ -56,19 +55,19 @@ public class HandlerMSK implements RequestHandler<KafkaEvent, String> {
 				return ("400 Message formate Error");
 			}
 
+			String updatedJsonItem = null;
 			try {
-				agUtils.aggregate(payload);
-
+				updatedJsonItem = agUtils.aggregate(payload);
+				if (updatedJsonItem != null) {
+					prod.publish("EligibilityTopic", updatedJsonItem);
+				}else {
+					logger.error("Issue with Aggreagtion String. check aggregation Logic or Update");
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error(e.getMessage());
 			}
-			try {
-				prod.publish("EligibilityTopic", decodedString);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
 			// logger.info("EVENT TYPE: {} \n", kafkaEvent.getClass().toString());
 		}
 
